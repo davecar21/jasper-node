@@ -18,7 +18,8 @@ module.exports.getCategories = (req,res) => {
 }
 
 module.exports.getSubCategories = (req,res) => {
-    Request.get(config.apiUrl+'resources/reports', (error, response, body) => {
+    let category = req.params.categoryId;
+    Request.get(config.apiUrl+"resources?expanded=true&type=folder&recursive=false&folderUri=/reports/"+category, (error, response, body) => {
         if(error) {
             return console.dir(error);
         }
