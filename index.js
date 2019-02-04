@@ -3,8 +3,8 @@ const app = express()
 var cors = require('cors')
 var bodyParser = require('body-parser');
 
-var Request = require('request')
-var parser = require('xml2json');
+var Request = require('request');
+var parser = require('xml-js');
 
 
 const port = 3000;
@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 app.use(bodyParser.json()); // for parsing application/json
 app.use(cors())
 
-const url = 'http://localhost:8080/jasperserver/rest_v2/resources/reports/interactive';
+const url = 'http://localhost:8080/jasperserver/rest_v2/resources/reports/';
 const urlPost = 'http://localhost:8080/jasperserver/rest_v2/resources?createFolders=true';
 const testUrl = 'https://jsonplaceholder.typicode.com/posts';
 
@@ -25,8 +25,8 @@ app.get('/', (req, res) => {
         if(error) {
             return console.dir(error);
         }
-        let data = parser.toJson(response.body);
-        res.send(data)
+        let data = parser.xml2json(response.body,{compact:true,spaces:4});
+        res.send(data);
     }).auth('jasperadmin', 'jasperadmin', false);
     
 })
@@ -49,6 +49,7 @@ app.post('/', (req, res) => {
             return console.dir(error);
         }
         // let data = parser.toJson(response.body);
+        let data = parser.xml2json(response.body,{compact:true,spaces:4});
         res.send(response)
     }).auth('jasperadmin', 'jasperadmin', false);
     
