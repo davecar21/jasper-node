@@ -1,7 +1,3 @@
-// const url = 'http://localhost:8080/jasperserver/rest_v2/resources/reports/';
-// const urlPost = 'http://localhost:8080/jasperserver/rest_v2/resources?createFolders=true';
-// const testUrl = 'https://jsonplaceholder.typicode.com/posts';
-// const urlCat = 'http://localhost:8080/jasperserver/rest_v2/resources?expanded=true&type=folder&folderUri=/reports&recursive=false'
 let config = require("../config");
 
 var Request = require('request');
@@ -30,7 +26,7 @@ module.exports.getSubCategories = (req,res) => {
 
 
 
-module.exports.addResources = (req,res) => {
+module.exports.addCategory = (req,res) => {
     let options = {
         url : config.apiUrl+"resources?createFolders=true",
         headers: {
@@ -40,12 +36,13 @@ module.exports.addResources = (req,res) => {
         body: req.body,
         json: true,
     }
+    // res.send(options);
 
     Request.post(options, (error, response, body) => {
         if(error) {
             return console.dir(error);
         }
         let data = parser.xml2json(response.body,{compact:true,spaces:4});
-        res.send(response)
+        res.send(data);
     }).auth(config.username, config.password, false);
 }

@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-let fileController = require('./controller/fileController');
+let folderController = require('./controller/folderController');
 
-router.get('/categories',fileController.getCategories);
-router.get('/subcategories/:categoryId',fileController.getSubCategories);
-router.post('/',fileController.addResources);
+router.get('/categories',folderController.getCategories);
+router.get('/subcategories/:categoryId',folderController.getSubCategories);
+router.post('/',folderController.addCategory);
 
 module.exports = router;
