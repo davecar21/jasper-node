@@ -31,7 +31,7 @@ module.exports.getSubCategories = (req,res) => {
 
 module.exports.addResources = (req,res) => {
     let options = {
-        url : urlPost,
+        url : config.apiUrl+"resources?createFolders=true",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/repository.folder+json"
@@ -46,5 +46,5 @@ module.exports.addResources = (req,res) => {
         }
         let data = parser.xml2json(response.body,{compact:true,spaces:4});
         res.send(response)
-    }).auth('jasperadmin', 'jasperadmin', false);
+    }).auth(config.username, config.password, false);
 }
