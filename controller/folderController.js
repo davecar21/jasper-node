@@ -28,7 +28,7 @@ module.exports.getSubCategories = (req,res) => {
 
 module.exports.addCategory = (req,res) => {
     let options = {
-        url : config.apiUrl+"resources?createFolders=true",
+        url : config.apiUrl+"resources/reports?createFolders=true",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/repository.folder+json"
@@ -36,13 +36,32 @@ module.exports.addCategory = (req,res) => {
         body: req.body,
         json: true,
     }
-    // res.send(options);
 
     Request.post(options, (error, response, body) => {
         if(error) {
             return console.dir(error);
         }
-        let data = parser.xml2json(response.body,{compact:true,spaces:4});
-        res.send(data);
+        res.send(response.body);
+    }).auth(config.username, config.password, false);
+}
+
+module.exports.addSubCategory = (req,res) => {
+    let category = req.params.categoryId;
+    
+    let options = {
+        url : config.apiUrl+"resources/reports/"+category+"?createFolders=false",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/repository.folder+json"
+        },
+        body: req.body,
+        json: true,
+    }
+
+    Request.post(options, (error, response, body) => {
+        if(error) {
+            return console.dir(error);
+        }
+        res.send(response.body);
     }).auth(config.username, config.password, false);
 }
