@@ -65,8 +65,18 @@ module.exports.editCategory = (req,res) => {
 }
 
 module.exports.deleteCategory = (req,res) => {
+    let url = config.apiUrl+"resources?";
+    let resource = req.body.resource;
+
+    resource.forEach((element,index) => {
+        if(index != resource.length-1 )
+            url += "resourceUri="+element.uri+"&";
+        else
+            url += "resourceUri="+element.uri;
+    });
+    
     let options = {
-        url : config.apiUrl+"resources?"+"overwrite=true",
+        url : url,
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/repository.folder+json"
