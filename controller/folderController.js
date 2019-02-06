@@ -28,7 +28,7 @@ module.exports.getSubCategories = (req,res) => {
 
 module.exports.addCategory = (req,res) => {
     let options = {
-        url : config.apiUrl+"resources/reports?createFolders=true",
+        url : config.apiUrl+"resources"+req.body.uri+"?createFolders=false",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/repository.folder+json"
@@ -45,11 +45,9 @@ module.exports.addCategory = (req,res) => {
     }).auth(config.username, config.password, false);
 }
 
-module.exports.addSubCategory = (req,res) => {
-    let category = req.params.categoryId;
-    
+module.exports.editCategory = (req,res) => {
     let options = {
-        url : config.apiUrl+"resources/reports/"+category+"?createFolders=false",
+        url : config.apiUrl+"resources"+req.body.uri+"?overwrite=true",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/repository.folder+json"
@@ -58,10 +56,35 @@ module.exports.addSubCategory = (req,res) => {
         json: true,
     }
 
-    Request.post(options, (error, response, body) => {
+    Request.put(options, (error, response, body) => {
         if(error) {
             return console.dir(error);
         }
         res.send(response.body);
     }).auth(config.username, config.password, false);
+}
+
+module.exports.deleteCategory = (req,res) => {
+    let options = {
+        url : config.apiUrl+"resources?"+"overwrite=true",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/repository.folder+json"
+        },
+        body: req.body,
+        json: true,
+    }
+
+    Request.delete(options, (error, response, body) => {
+        if(error) {
+            return console.dir(error);
+        }
+        res.send(response.body);
+    }).auth(config.username, config.password, false);
+}
+
+module.exports.sampleCreateComplexReport = (req,res) => {
+    //createReport(param1, param2)
+    //createSubReports()
+    //addImages()
 }
