@@ -1,8 +1,4 @@
 let config = require("../config");
-
-var Request = require('request');
-var parser = require('xml-js');
-
 let categoryService = require('../services/category-service');
 
 module.exports.getCategories = async (req,res) => {
