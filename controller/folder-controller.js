@@ -3,30 +3,22 @@ let config = require("../config");
 var Request = require('request');
 var parser = require('xml-js');
 
-module.exports.getCategories = (req,res) => {
-    Request.get(config.apiUrl+"resources?expanded=true&type=folder&recursive=false&folderUri=/reports", (error, response, body) => {
-        if(error) {
-            return console.dir(error);
-        }
-        let data = parser.xml2json(response.body,{compact:true,spaces:4});
-        res.send(data)
-    }).auth(config.username, config.password, false);
+let categoryService = require('../services/category-service');
+
+module.exports.getCategories = async (req,res) => {
+    let getCategoriesResult = await categoryService.getCategory();
+    res.send(getCategoriesResult);
 }
 
-module.exports.getSubCategories = (req,res) => {
+module.exports.getSubCategories = async (req,res) => {
     let category = req.params.categoryId;
-    Request.get(config.apiUrl+"resources?expanded=true&type=folder&recursive=false&folderUri=/reports/"+category, (error, response, body) => {
-        if(error) {
-            return console.dir(error);
-        }
-        let data = parser.xml2json(response.body,{compact:true,spaces:4});
-        res.send(data)
-    }).auth(config.username, config.password, false);
+    let getSubCategoriesResult = await categoryService.getSubCategory(category);
+    res.send(getSubCategoriesResult);
 }
 
 
 
-module.exports.addCategory = (req,res) => {
+module.exports.addCategory = async (req,res) => {
     let options = {
         url : config.apiUrl+"resources"+req.body.uri+"?createFolders=false",
         headers: {
@@ -37,15 +29,11 @@ module.exports.addCategory = (req,res) => {
         json: true,
     }
 
-    Request.post(options, (error, response, body) => {
-        if(error) {
-            return console.dir(error);
-        }
-        res.send(response.body);
-    }).auth(config.username, config.password, false);
+    let addCategoryResult = await categoryService.addCategory(options);
+    res.send(addCategoryResult);
 }
 
-module.exports.editCategory = (req,res) => {
+module.exports.editCategory = async (req,res) => {
     let options = {
         url : config.apiUrl+"resources"+req.body.uri+"?overwrite=true",
         headers: {
@@ -56,15 +44,11 @@ module.exports.editCategory = (req,res) => {
         json: true,
     }
 
-    Request.put(options, (error, response, body) => {
-        if(error) {
-            return console.dir(error);
-        }
-        res.send(response.body);
-    }).auth(config.username, config.password, false);
+    let editCategoryResult = await categoryService.editCategory(options);
+    res.send(editCategoryResult);
 }
 
-module.exports.deleteCategory = (req,res) => {
+module.exports.deleteCategory = async (req,res) => {
     let url = config.apiUrl+"resources?";
     let resource = req.body.resource;
 
@@ -85,12 +69,8 @@ module.exports.deleteCategory = (req,res) => {
         json: true,
     }
 
-    Request.delete(options, (error, response, body) => {
-        if(error) {
-            return console.dir(error);
-        }
-        res.send(response.body);
-    }).auth(config.username, config.password, false);
+    let deleteCategoryResult = await categoryService.deleteCategory(options);
+    res.send(deleteCategoryResult);
 }
 
 module.exports.sampleCreateComplexReport = (req,res) => {
