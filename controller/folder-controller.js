@@ -2,17 +2,27 @@ let config = require("../config");
 let categoryService = require('../services/category-service');
 
 module.exports.getCategories = async (req,res) => {
-    let getCategoriesResult = await categoryService.getCategory();
+    let options = {
+        url: config.apiUrl+"resources?expanded=true&type=folder&recursive=false&folderUri=/reports",
+        headers:{
+            "Accept": "application/json"
+        }
+    }
+    let getCategoriesResult = await categoryService.getFolder(options);
     res.send(getCategoriesResult);
 }
 
 module.exports.getSubCategories = async (req,res) => {
     let category = req.params.categoryId;
-    let getSubCategoriesResult = await categoryService.getSubCategory(category);
+    let options = {
+        url: config.apiUrl+"resources?expanded=true&type=folder&recursive=false&folderUri=/reports/"+category,
+        headers:{
+            "Accept": "application/json"
+        }
+    }
+    let getSubCategoriesResult = await categoryService.getSubFolder(options);
     res.send(getSubCategoriesResult);
 }
-
-
 
 module.exports.addCategory = async (req,res) => {
     let options = {

@@ -1,28 +1,25 @@
 let config = require("../config");
 
 var Request = require('request');
-var parser = require('xml-js');
 
-module.exports.getCategory = () => {
+module.exports.getFolder = (options) => {
     return new Promise(function (resolve,reject){
-        Request.get(config.apiUrl+"resources?expanded=true&type=folder&recursive=false&folderUri=/reports", (error, response, body) => {
+        Request.get(options, (error, response, body) => {
             if(error) {
                 return reject(error);
             }
-            let data = parser.xml2json(response.body,{compact:true,spaces:4});
-            return resolve(data);
+            return resolve(response.body);
         }).auth(config.username, config.password, false);
     });
 }
 
-module.exports.getSubCategory = (category) => {
+module.exports.getSubFolder = (options) => {
     return new Promise (function (resolve,reject){
-        Request.get(config.apiUrl+"resources?expanded=true&type=folder&recursive=false&folderUri=/reports/"+category, (error, response, body) => {
+        Request.get(options, (error, response, body) => {
             if(error) {
                 return reject (error);
             }
-            let data = parser.xml2json(response.body,{compact:true,spaces:4});
-            return resolve(data);
+            return resolve(response.body);
         }).auth(config.username, config.password, false);
     });
 }
