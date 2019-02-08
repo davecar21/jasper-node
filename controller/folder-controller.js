@@ -2,60 +2,28 @@ let config = require("../config");
 let categoryService = require('../services/category-service');
 
 module.exports.getCategories = async (req,res) => {
-    let options = {
-        url: config.apiUrl+"resources?expanded=true&type=folder&recursive=false&folderUri=/reports",
-        headers:{
-            "Accept": "application/json"
-        }
-    }
-    let getCategoriesResult = await categoryService.getFolder(options);
+    let getCategoriesResult = await categoryService.getFolder();
     res.send(getCategoriesResult);
 }
 
 module.exports.getSubCategories = async (req,res) => {
     let category = req.params.categoryId;
-    let options = {
-        url: config.apiUrl+"resources?expanded=true&type=folder&recursive=false&folderUri=/reports/"+category,
-        headers:{
-            "Accept": "application/json"
-        }
-    }
-    let getSubCategoriesResult = await categoryService.getSubFolder(options);
+    let getSubCategoriesResult = await categoryService.getSubFolder(category);
     res.send(getSubCategoriesResult);
 }
 
 module.exports.addCategory = async (req,res) => {
-    let options = {
-        url : config.apiUrl+"resources"+req.body.uri+"?createFolders=false",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/repository.folder+json"
-        },
-        body: req.body,
-        json: true,
-    }
-
-    let addCategoryResult = await categoryService.addCategory(options);
+    let addCategoryResult = await categoryService.addCategory(req.body);
     res.send(addCategoryResult);
 }
 
 module.exports.editCategory = async (req,res) => {
-    let options = {
-        url : config.apiUrl+"resources"+req.body.uri+"?overwrite=true",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/repository.folder+json"
-        },
-        body: req.body,
-        json: true,
-    }
-
-    let editCategoryResult = await categoryService.editCategory(options);
+    let editCategoryResult = await categoryService.editCategory(req.body);
     res.send(editCategoryResult);
 }
 
 module.exports.deleteCategory = async (req,res) => {
-    let url = config.apiUrl+"resources?";
+    let url = config.apiUrl+"/resources?";
     let resource = req.body.resource;
 
     resource.forEach((element,index) => {
@@ -64,18 +32,8 @@ module.exports.deleteCategory = async (req,res) => {
         else
             url += "resourceUri="+element.uri;
     });
-    
-    let options = {
-        url : url,
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/repository.folder+json"
-        },
-        body: req.body,
-        json: true,
-    }
 
-    let deleteCategoryResult = await categoryService.deleteCategory(options);
+    let deleteCategoryResult = await categoryService.deleteCategory(url);
     res.send(deleteCategoryResult);
 }
 

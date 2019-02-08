@@ -12,5 +12,6 @@ router.delete('/',folderController.deleteCategory);
 
 //report
 router.post('/reports',reportController.createReport);
+router.put('/reports',reportController.editReport);
 
 module.exports = router;

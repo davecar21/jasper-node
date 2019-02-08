@@ -27,7 +27,7 @@ module.exports.addReport = (content) => {
     }
     
     let options = {
-        url: config.apiUrl+"resources/reports",
+        url: config.apiUrl+"/resources/reports",
         headers:{
             "Content-Type": "application/repository.reportUnit+json",
             "Accept": "application/json"
@@ -38,6 +38,92 @@ module.exports.addReport = (content) => {
 
     return new Promise (function(resolve,reject){
         Request.post(options, (error, response, body) => {
+            if(error) {
+                return reject(error);
+            }
+            return resolve(response.body);
+        }).auth(config.username, config.password, false);
+    });
+};
+
+module.exports.editReport = (content) => {
+    let report = {
+        "version": content.version,
+        "label":content.label,
+        "description": content.description,
+        "dataSource": {
+            "dataSourceReference" : {
+                "uri" : "/datasources/jasper_oracle"
+            }
+        },
+        "jrxml":{
+            "jrxmlFileReference" : {
+                "uri": content.jrxmlReference
+            }
+        }
+    }
+
+    if(content.jrxml != undefined){
+        report.jrxml = {
+            "jrxmlFile" : {
+                "type": "jrxml",
+                "label": content.label+"-template",
+                "content": content.jrxml
+            }
+        }
+    }
+
+    let options = {
+        url: config.apiUrl+"/resources"+content.uri,
+        headers:{
+            "Content-Type": "application/repository.reportUnit+json",
+            "Accept": "application/json"
+        },
+        body: report,
+        json: true,
+    };
+
+    return new Promise (function(resolve,reject){
+        Request.put(options, (error, response, body) => {
+            if(error) {
+                return reject(error);
+            }
+            return resolve(response.body);
+        }).auth(config.username, config.password, false);
+    });
+}
+
+module.exports.editReportNoJrxml = (content) => {
+    let report = {
+        "version": content.version,
+        "label":content.label,
+        "description": content.description,
+        "dataSource": {
+            "dataSourceReference" : {
+                "uri" : "/datasources/jasper_oracle"
+            }
+        },
+        "jrxml":{
+            "jrxmlFile" : {
+                "type": "jrxml",
+                "label": content.label+"-template",
+                "content": content.jrxml
+            }
+        }
+    }
+
+    let options = {
+        url: config.apiUrl+"/resources"+content.uri,
+        headers:{
+            "Content-Type": "application/repository.reportUnit+json",
+            "Accept": "application/json"
+        },
+        body: report,
+        json: true,
+    };
+
+    return new Promise (function(resolve,reject){
+        Request.put(options, (error, response, body) => {
             if(error) {
                 return reject(error);
             }

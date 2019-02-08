@@ -11,3 +11,8 @@ module.exports.createReport = async (req,res) => {
     let createReportResult = await reportService.addReport(req.body);
     res.send(createReportResult);
 }
+
+module.exports.editReport = async (req,res) => {
+    let editReportResult = await reportService.editReport(req.body);
+    res.send(editReportResult);
+}
