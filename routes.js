@@ -5,7 +5,7 @@ let reportController = require('./controller/reports-controller');
 
 //folder
 router.get('/categories',folderController.getCategories);
-router.get('/subcategories/:categoryId',folderController.getSubCategories);
+router.get('/subcategories',folderController.getSubCategories);
 router.post('/',folderController.addCategory);
 router.put('/',folderController.editCategory);
 router.delete('/',folderController.deleteCategory);

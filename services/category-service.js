@@ -20,8 +20,9 @@ module.exports.getFolder = () => {
 }
 
 module.exports.getSubFolder = (category) => {
+    console.log(category)
     let options = {
-        url: config.apiUrl+"/resources?expanded=true&type=folder&recursive=false&folderUri=/reports/"+category,
+        url: config.apiUrl+"/resources?expanded=true&type=folder&recursive=false&folderUri="+category,
         headers:{
             "Accept": "application/json"
         }

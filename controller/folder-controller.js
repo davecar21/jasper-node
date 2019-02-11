@@ -7,7 +7,7 @@ module.exports.getCategories = async (req,res) => {
 }
 
 module.exports.getSubCategories = async (req,res) => {
-    let category = req.params.categoryId;
+    let category = req.body.category;
     let getSubCategoriesResult = await categoryService.getSubFolder(category);
     res.send(getSubCategoriesResult);
 }
