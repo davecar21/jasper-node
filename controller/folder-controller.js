@@ -7,7 +7,8 @@ module.exports.getCategories = async (req,res) => {
 }
 
 module.exports.getSubCategories = async (req,res) => {
-    let category = req.body.category;
+    let category = req.query.uri;
+    console.log(req.query);
     let getSubCategoriesResult = await categoryService.getSubFolder(category);
     res.send(getSubCategoriesResult);
 }
